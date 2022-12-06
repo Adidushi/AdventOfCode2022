@@ -4,28 +4,25 @@ def q1():
     with open('day 02\input.txt', 'r') as f:
         input = f.read().splitlines()
 
-    winning = (('A', 'Y'), ('B', 'Z'), ('C', 'X'))
-    tie = (('A', 'X'), ('B', 'Y'), ('C', 'Z'))
-
-    pointage = {
-        'X': 1,
-        'Y': 2,
-        'Z': 3
+    decision_tree = {
+        'A': {
+            'X': 1+3,
+            'Y': 2+6,
+            'Z': 0+3
+        },
+        'B': {
+            'X': 1+0,
+            'Y': 2+3,
+            'Z': 3+6
+        },
+        'C': {
+            'X': 1+6,
+            'Y': 2+0,
+            'Z': 3+3
+        }
     }
 
-    total_score = 0
-
-    for game in input:
-        moves = tuple(game.split())
-        if moves in winning:
-            total_score += 6
-        elif moves in tie:
-            total_score += 3
-
-        them, me = moves
-        total_score += pointage[me]
-
-    return total_score
+    return sum(decision_tree[g.split()[0]][g.split()[1]] for g in input)
 
 
 def q2():
