@@ -1,52 +1,4 @@
-from copy import deepcopy
 from dataclasses import dataclass
-from itertools import pairwise
-
-
-backspace = '\b'
-
-
-class RopeLink:
-    def __init__(self, length):
-        self.position = [0, 0]
-        self.length = length
-        if self.length:
-            self.child = RopeLink(self.length-1)
-        else:
-            self.child = None
-
-    def __str__(self):
-        return f'{self.position}-{str(self.child) if self.child else backspace} '
-
-    def move(self, direction, first=False):
-
-        if first:
-            new_pos = self.position.copy()
-
-            match direction:
-                case 'R':
-                    new_pos[0] += 1
-                case 'L':
-                    new_pos[0] -= 1
-                case 'U':
-                    new_pos[1] += 1
-                case 'D':
-                    new_pos[1] -= 1
-
-            if abs(self.child.position[0] - new_pos[0]) > 1 or abs(self.child.position[1] - new_pos[1]) > 1:
-                self.child.move(self.position)
-            self.position = new_pos
-
-        else:
-            if self.child:
-                if abs(self.child.position[0] - direction[0]) > 1 or abs(self.child.position[1] - direction[1]) > 1:
-                    self.child.move(direction)
-
-            self.position = direction
-
-    def get_final_child(self):
-
-        return self.child.get_final_child() if self.child else self
 
 
 def q1():
@@ -83,18 +35,6 @@ def q1():
     return len(visited)
 
 
-@dataclass
-class Pos:
-    pos: list
-    old_pos: list
-
-    def __getitem__(self, index):
-        return self.pos[index]
-
-    def __setitem__(self, index, value):
-        self.pos[index] = value
-
-
 def q2():
     with open('day 09\input.txt', 'r') as f:
         input = f.read().splitlines()
@@ -123,7 +63,8 @@ def q2():
 
                 distance = rope[i-1] - rope[i]
                 if abs(distance) >= 2:
-                    rope[i] += complex((distance.real > 0) - (distance.real < 0), (distance.imag > 0) - (distance.imag < 0))
+                    rope[i] += complex((distance.real > 0) - (distance.real < 0),
+                                       (distance.imag > 0) - (distance.imag < 0))
 
             visited.add(rope[-1])
 
